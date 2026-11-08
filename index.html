@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bluebarry · study portal</title>
+    <title>Bluebarry</title>
     <style>
         * {
             margin: 0;
@@ -13,7 +13,7 @@
         }
 
         body {
-            background: #e6f0ff;  /* light blue background */
+            background: #e6f0ff;  /* light blue background (was pink) */
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -236,7 +236,7 @@
 </head>
 <body>
     <div class="bluebarry-card">
-        <!-- header with Bluebarry branding and button -->
+        <!-- exact same header row as Strawberri, just renamed -->
         <div class="header-row">
             <h1>
                 🫐 Bluebarry
@@ -248,13 +248,13 @@
             </div>
         </div>
 
-        <!-- main title -->
+        <!-- exact same main title -->
         <h2>Study Portal — Standards-Aligned Practice for Kindergarten Through Grade 12</h2>
         <p class="tagline">
             Bluebarry is a free practice library for students, teachers and families. It covers mathematics, English language arts, science, social studies and world languages across every grade band, with diagnostic placement, spaced review and printable progress reports. Every skill is mapped to Common Core State Standards, the Next Generation Science Standards, or the relevant state framework.
         </p>
 
-        <!-- subject cards grid -->
+        <!-- exact same subject cards, unchanged copy -->
         <div class="subject-grid">
             <div class="subject-card">
                 <h4>📐 Mathematics</h4>
@@ -282,13 +282,13 @@
             </div>
         </div>
 
-        <!-- How practice works -->
+        <!-- exact same "How Practice Works" section -->
         <h2>How Practice Works</h2>
         <div class="highlight-blue">
             A short diagnostic places each learner at the right starting skill rather than the start of a grade. Questions adapt as accuracy rises, and skills that were answered incorrectly return on a spaced schedule until they are secure. Every question includes a step-by-step explanation rather than a bare answer key. Teachers and families can view usage time, skills mastered, and per-standard breakdowns, and export progress reports for conferences, intervention planning and individualised education programme documentation.
         </div>
 
-        <!-- Accessibility block -->
+        <!-- exact same accessibility section -->
         <div class="accessibility-note">
             <strong>♿ Accessibility:</strong> The interface supports keyboard navigation, screen reader labelling, adjustable text size, high contrast display, and extended or untimed practice for learners with accommodations. Reading passages are available with text-to-speech, and mathematics content is written to be legible to assistive technology.
         </div>
@@ -300,7 +300,7 @@
     </div>
 
     <script>
-        // fun bluebarry button alert
+        // button behavior
         const btn = document.getElementById('bluebarryButton');
         if (btn) {
             btn.addEventListener('click', function() {
