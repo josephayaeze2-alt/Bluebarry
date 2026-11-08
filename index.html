@@ -3,390 +3,310 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Blueberry</title>
-    <link rel="icon" href="https://cdn-icons-png.flaticon.com/512/1032/1032952.png">
+    <title>Bluebarry · study portal</title>
     <style>
-        :root {
-            --bg: #0b0b0b;
-            --surface: #151515;
-            --surface-hover: #1f1f1f;
-            --border: #2a2a2a;
-            --text: #ffffff;
-            --text-muted: #a0a0a0;
-            --accent: #4a6cf7;
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
         }
-
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; }
 
         body {
-            background-color: var(--bg);
-            color: var(--text);
+            background: #e6f0ff;  /* light blue background */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
             min-height: 100vh;
+            padding: 2rem 1rem;
         }
 
-        /* HEADER */
-        header {
-            background: var(--surface);
-            border-bottom: 1px solid var(--border);
-            padding: 15px 30px;
+        .bluebarry-card {
+            max-width: 1100px;
+            width: 100%;
+            background: white;
+            border-radius: 42px;
+            box-shadow: 0 20px 40px rgba(0, 80, 180, 0.15), 0 8px 20px rgba(0, 50, 130, 0.1);
+            padding: 2.5rem 2.2rem;
+            border: 2px solid #a8ccff;
+        }
+
+        .header-row {
             display: flex;
+            flex-wrap: wrap;
             align-items: center;
             justify-content: space-between;
-            position: sticky;
-            top: 0;
-            z-index: 100;
+            margin-bottom: 1.8rem;
         }
 
-        .logo {
-            font-size: 1.5rem;
+        h1 {
+            font-size: 2.8rem;
             font-weight: 700;
-            color: var(--accent);
+            letter-spacing: -0.02em;
+            color: #0a2f6c;
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 12px;
         }
 
-        .search-container {
-            flex: 1;
-            max-width: 400px;
-            margin: 0 30px;
+        h1 span {
+            background: #2163e0;
+            color: white;
+            font-size: 1.4rem;
+            font-weight: 600;
+            padding: 0.3rem 1.2rem;
+            border-radius: 100px;
+            letter-spacing: 0.3px;
+            box-shadow: 0 4px 0 #0b3b8c;
         }
 
-        #searchInput {
-            width: 100%;
-            padding: 10px 15px;
-            background: var(--bg);
-            border: 1px solid var(--border);
-            border-radius: 6px;
-            color: var(--text);
-            font-size: 0.95rem;
-            outline: none;
-            transition: border-color 0.2s;
-        }
-        #searchInput:focus { border-color: var(--accent); }
-
-        .nav-buttons { display: flex; gap: 10px; }
-
-        .btn {
-            background: var(--surface-hover);
-            border: 1px solid var(--border);
-            color: var(--text-muted);
-            padding: 8px 16px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 0.9rem;
-            transition: all 0.2s;
-        }
-        .btn:hover { background: #2a2a2a; color: white; }
-        .btn.panic { border-color: #ff4444; color: #ff4444; }
-        .btn.panic:hover { background: #ff4444; color: white; }
-
-        /* MAIN CONTENT */
-        main {
-            padding: 30px;
-            max-width: 1400px;
-            margin: 0 auto;
-        }
-
-        .section-title {
-            font-size: 1.2rem;
-            margin-bottom: 20px;
-            color: var(--text-muted);
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .games-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        .button-area {
+            display: flex;
+            align-items: center;
             gap: 20px;
         }
 
-        .game-card {
-            background: var(--surface);
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            overflow: hidden;
-            cursor: pointer;
-            transition: transform 0.2s, box-shadow 0.2s;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .game-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(0,0,0,0.5);
-            border-color: var(--accent);
-        }
-
-        .game-thumb {
-            width: 100%;
-            height: 150px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 3rem;
-        }
-
-        .game-info {
-            padding: 15px;
-            flex: 1;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .game-info h3 {
-            font-size: 1rem;
+        .press-note {
+            font-size: 1.2rem;
             font-weight: 500;
-            text-align: center;
+            color: #1e4f9e;
+            background: #d4e4ff;
+            padding: 0.5rem 1.4rem;
+            border-radius: 60px;
+            border: 1px dashed #2163e0;
         }
 
-        /* MODAL */
-        .modal {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.95);
-            display: none;
-            z-index: 1000;
-            align-items: center;
-            justify-content: center;
-        }
-        .modal.active { display: flex; }
-
-        .modal-content {
-            width: 95vw;
-            height: 95vh;
-            background: black;
-            border-radius: 8px;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .close-btn {
-            position: absolute;
-            top: 20px;
-            right: 30px;
-            width: 40px;
-            height: 40px;
-            background: rgba(255,255,255,0.1);
+        .bluebarry-btn {
+            background: #2163e0;
             border: none;
+            border-radius: 60px;
+            padding: 0.9rem 2.4rem;
+            font-size: 1.3rem;
+            font-weight: 700;
             color: white;
-            font-size: 1.5rem;
-            border-radius: 50%;
             cursor: pointer;
-            z-index: 1001;
-            backdrop-filter: blur(5px);
+            box-shadow: 0 6px 0 #0b3b8c, 0 8px 18px rgba(20, 80, 200, 0.3);
+            transition: all 0.1s ease;
+            letter-spacing: 0.5px;
+            border: 2px solid #7aa9ff;
         }
-        .close-btn:hover { background: rgba(255,255,255,0.2); }
 
-        iframe { width: 100%; height: 100%; border: none; }
+        .bluebarry-btn:active {
+            transform: translateY(6px);
+            box-shadow: 0 2px 0 #0b3b8c, 0 5px 12px rgba(20, 80, 200, 0.4);
+        }
 
-        /* SETTINGS MODAL */
-        .settings-modal {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.8);
-            display: none;
-            z-index: 999;
+        .tagline {
+            font-size: 1.3rem;
+            color: #1a4a96;
+            margin-bottom: 2rem;
+            font-weight: 450;
+            border-left: 6px solid #2163e0;
+            padding-left: 1.3rem;
+            background: linear-gradient(90deg, #ecf3ff, transparent);
+        }
+
+        h2 {
+            font-size: 2rem;
+            font-weight: 600;
+            color: #0b2f63;
+            margin-top: 2rem;
+            margin-bottom: 0.75rem;
+            letter-spacing: -0.01em;
+        }
+
+        h3 {
+            font-size: 1.35rem;
+            font-weight: 600;
+            color: #103e82;
+            margin-top: 1.4rem;
+            margin-bottom: 0.4rem;
+            display: inline-block;
+            border-bottom: 3px solid #a8ccff;
+            padding-bottom: 0.2rem;
+        }
+
+        p, li {
+            font-size: 1.05rem;
+            line-height: 1.6;
+            color: #1a2d4a;
+        }
+
+        ul {
+            padding-left: 1.8rem;
+            margin: 0.8rem 0 1.2rem;
+        }
+
+        li {
+            margin-bottom: 0.4rem;
+        }
+
+        .subject-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 1.2rem;
+            margin: 1.5rem 0 1rem;
+        }
+
+        .subject-card {
+            background: #f0f6ff;
+            border-radius: 28px;
+            padding: 1.4rem 1.3rem;
+            border: 1px solid #b8d4ff;
+            box-shadow: 0 4px 10px rgba(30, 100, 220, 0.05);
+        }
+
+        .subject-card h4 {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #0a3b7a;
+            margin-bottom: 0.6rem;
+            display: flex;
             align-items: center;
-            justify-content: center;
+            gap: 6px;
         }
-        .settings-modal.active { display: flex; }
-        
-        .settings-box {
-            background: var(--surface);
-            border: 1px solid var(--border);
-            padding: 30px;
-            border-radius: 8px;
-            width: 400px;
+
+        .subject-card p {
+            font-size: 0.95rem;
+            color: #1b3760;
         }
-        .settings-box h2 { margin-bottom: 20px; }
-        .setting-group { margin-bottom: 15px; }
-        .setting-group label { display: block; margin-bottom: 5px; color: var(--text-muted); font-size: 0.9rem; }
-        .setting-group input, .setting-group select {
-            width: 100%;
-            padding: 8px;
-            background: var(--bg);
-            border: 1px solid var(--border);
-            color: white;
-            border-radius: 4px;
+
+        .highlight-blue {
+            background: #deecff;
+            border-radius: 16px;
+            padding: 0.9rem 1.4rem;
+            margin: 1rem 0;
+            border-left: 8px solid #2163e0;
+            font-weight: 500;
+            color: #00307a;
+        }
+
+        .accessibility-note {
+            background: #d2e4ff;
+            border-radius: 24px;
+            padding: 1.2rem 1.6rem;
+            margin-top: 2rem;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 1rem;
+            border: 1px solid #9ec0ff;
+        }
+
+        .accessibility-note strong {
+            color: #09306b;
+        }
+
+        .footer-note {
+            margin-top: 2.2rem;
+            text-align: center;
+            color: #5a7ba8;
+            font-size: 0.95rem;
+            border-top: 1px solid #b8d0ff;
+            padding-top: 1.4rem;
+            font-style: italic;
+        }
+
+        @media (max-width: 650px) {
+            .bluebarry-card {
+                padding: 1.8rem 1.2rem;
+            }
+            h1 {
+                font-size: 2rem;
+            }
+            h1 span {
+                font-size: 1rem;
+            }
+            .press-note {
+                font-size: 1rem;
+                padding: 0.4rem 1rem;
+            }
+            .bluebarry-btn {
+                padding: 0.7rem 1.6rem;
+                font-size: 1.1rem;
+            }
+            .header-row {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 18px;
+            }
         }
     </style>
 </head>
 <body>
-
-    <header>
-        <div class="logo">🫐 Blueberry</div>
-        <div class="search-container">
-            <input type="text" id="searchInput" placeholder="Search games...">
-        </div>
-        <div class="nav-buttons">
-            <button class="btn" id="settingsBtn">Settings</button>
-            <button class="btn panic" id="panicBtn">Panic (Shift + ~)</button>
-        </div>
-    </header>
-
-    <main>
-        <h2 class="section-title">Featured Games</h2>
-        <div class="games-grid" id="gamesGrid">
-            <!-- Games injected via JS -->
-        </div>
-    </main>
-
-    <!-- Game Play Modal -->
-    <div class="modal" id="gameModal">
-        <button class="close-btn" id="closeModal">&times;</button>
-        <div class="modal-content">
-            <iframe id="gameFrame" src="" allowfullscreen></iframe>
-        </div>
-    </div>
-
-    <!-- Settings Modal -->
-    <div class="settings-modal" id="settingsModal">
-        <div class="settings-box">
-            <h2>Tab Cloaking</h2>
-            <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 20px;">Change how your tab looks when teachers walk by.</p>
-            <div class="setting-group">
-                <label>Preset</label>
-                <select id="cloakPreset">
-                    <option value="default">Blueberry (Default)</option>
-                    <option value="classroom">Google Classroom</option>
-                    <option value="canvas">Canvas Dashboard</option>
-                    <option value="drive">Google Drive</option>
-                    <option value="khan">Khan Academy</option>
-                </select>
+    <div class="bluebarry-card">
+        <!-- header with Bluebarry branding and button -->
+        <div class="header-row">
+            <h1>
+                🫐 Bluebarry
+                <span>press a button</span>
+            </h1>
+            <div class="button-area">
+                <div class="press-note">press a button, any button</div>
+                <button class="bluebarry-btn" id="bluebarryButton">PRESS</button>
             </div>
-            <button class="btn" style="width: 100%; margin-top: 10px;" id="saveSettings">Save</button>
-            <button class="btn" style="width: 100%; margin-top: 10px; background: transparent;" id="closeSettings">Close</button>
+        </div>
+
+        <!-- main title -->
+        <h2>Study Portal — Standards-Aligned Practice for Kindergarten Through Grade 12</h2>
+        <p class="tagline">
+            Bluebarry is a free practice library for students, teachers and families. It covers mathematics, English language arts, science, social studies and world languages across every grade band, with diagnostic placement, spaced review and printable progress reports. Every skill is mapped to Common Core State Standards, the Next Generation Science Standards, or the relevant state framework.
+        </p>
+
+        <!-- subject cards grid -->
+        <div class="subject-grid">
+            <div class="subject-card">
+                <h4>📐 Mathematics</h4>
+                <p>Kindergarten through grade 2 builds counting, place value, addition and subtraction within 100, measurement, and two-dimensional shapes. Grades 3 to 5 cover multiplication and division fluency, equivalent fractions, decimal operations, area and perimeter, volume, and coordinate graphing. Middle school moves through ratios and proportional relationships, integers and rational numbers, expressions and linear equations, the Pythagorean theorem, and introductory statistics and probability. High school tracks include Algebra I, Geometry, Algebra II, Precalculus, AP Statistics and AP Calculus AB and BC, with worked solutions for quadratics, logarithms, trigonometric identities, sequences and series, limits, derivatives and integrals.</p>
+            </div>
+            <div class="subject-card">
+                <h4>📖 English Language Arts</h4>
+                <p>Early literacy begins with phonemic awareness, letter-sound correspondence, decoding, sight words and oral reading fluency. Later grades develop close reading of literary and informational text, main idea and supporting detail, author's purpose, point of view, figurative language, and evidence-based analysis. Writing instruction moves from sentence construction and paragraph structure to narrative, expository, argumentative and research writing, including thesis development, counterclaims, source evaluation, and citation in MLA and APA style. Grammar practice covers parts of speech, subject-verb agreement, verb tense, clauses, punctuation and commonly confused words.</p>
+            </div>
+            <div class="subject-card">
+                <h4>🔬 Science</h4>
+                <p>Elementary units introduce living and non-living things, habitats and food webs, weather and seasons, states of matter, forces and motion, and the water cycle. Middle school covers cells and heredity, body systems, ecosystems and energy flow, plate tectonics, the rock cycle, atomic structure, chemical reactions, waves, and the solar system. High school courses span Biology, Chemistry, Physics and Environmental Science, including photosynthesis and cellular respiration, Mendelian genetics and DNA replication, natural selection, stoichiometry, periodic trends, acids and bases, thermodynamics, kinematics, circuits and electromagnetism. Laboratory practice emphasises hypothesis formation, controlled variables, data tables, graphing and error analysis.</p>
+            </div>
+            <div class="subject-card">
+                <h4>🌍 Social Studies</h4>
+                <p>United States history runs from indigenous nations and colonial settlement through the Revolution, the Constitution, westward expansion, the Civil War and Reconstruction, industrialisation and immigration, the Progressive Era, the World Wars, the Great Depression, the Civil Rights Movement and the modern era. World history covers ancient river valley civilisations, classical Greece and Rome, medieval Europe, Islamic empires, dynastic China, the Renaissance and Reformation, exploration and colonisation, revolutions, and twentieth century conflict. Civics units address the three branches of government, federalism, the Bill of Rights, the legislative process, elections and civic participation. Geography and economics cover map skills, climate regions, population and migration, supply and demand, scarcity and opportunity cost, and personal financial literacy.</p>
+            </div>
+            <div class="subject-card">
+                <h4>🗣️ World Languages</h4>
+                <p>Language courses combine audio-first lessons, native speaker dialogue, and written practice for Spanish, French, German, Italian, Portuguese, Mandarin Chinese, Japanese, Korean, Russian, Arabic, Hindi and English as a Second Language. Lessons are mapped to the Common European Framework of Reference across the A1, A2, B1, B2 and C1 bands, and to ACTFL proficiency levels for United States classrooms. Each unit pairs a contextual dialogue with vocabulary drilling, pronunciation practice, and a short composition task, and spaced repetition keeps earlier vocabulary in long-term memory.</p>
+            </div>
+            <div class="subject-card">
+                <h4>📝 Test Preparation</h4>
+                <p>Preparation tracks cover the SAT and ACT, PSAT and NMSQT, AP examinations across mathematics, the sciences, history and world languages, and state summative assessments. Language certification tracks support DELE and SIELE for Spanish, DELF and DALF for French, the Goethe-Zertifikat for German, CILS for Italian, HSK for Mandarin, JLPT for Japanese, TOPIK for Korean, and TOEFL and IELTS for English. Full-length timed practice sections report a scaled score estimate alongside a breakdown of question types missed.</p>
+            </div>
+        </div>
+
+        <!-- How practice works -->
+        <h2>How Practice Works</h2>
+        <div class="highlight-blue">
+            A short diagnostic places each learner at the right starting skill rather than the start of a grade. Questions adapt as accuracy rises, and skills that were answered incorrectly return on a spaced schedule until they are secure. Every question includes a step-by-step explanation rather than a bare answer key. Teachers and families can view usage time, skills mastered, and per-standard breakdowns, and export progress reports for conferences, intervention planning and individualised education programme documentation.
+        </div>
+
+        <!-- Accessibility block -->
+        <div class="accessibility-note">
+            <strong>♿ Accessibility:</strong> The interface supports keyboard navigation, screen reader labelling, adjustable text size, high contrast display, and extended or untimed practice for learners with accommodations. Reading passages are available with text-to-speech, and mathematics content is written to be legible to assistive technology.
+        </div>
+
+        <!-- footer note -->
+        <div class="footer-note">
+            Bluebarry — a blueberry-inspired take on the strawberrii study portal. All the berries, none of the red.
         </div>
     </div>
 
     <script>
-        // GAMES DATABASE
-        // REPLACE THE 'url' FIELDS WITH YOUR ACTUAL GAME FILE LINKS
-        const games = [
-            { title: "Slope", url: "#", icon: "🏔️", color: "#ff4444" },
-            { title: "1v1.lol", url: "#", icon: "🔫", color: "#4a6cf7" },
-            { title: "Retro Bowl", url: "#", icon: "🏈", color: "#ffaa00" },
-            { title: "Run 3", url: "#", icon: "🏃", color: "#00ccff" },
-            { title: "Paper.io 2", url: "#", icon: "📄", color: "#ffffff" },
-            { title: "Geometry Dash", url: "#", icon: "🔷", color: "#00ff00" },
-            { title: "Subway Surfers", url: "#", icon: "🚇", color: "#ffcc00" },
-            { title: "Cookie Clicker", url: "#", icon: "🍪", color: "#d2691e" },
-            { title: "Tetris", url: "#", icon: "🧱", color: "#ff00ff" },
-            { title: "Pac-Man", url: "#", icon: "🟡", color: "#ffff00" },
-            { title: "Moto X3M", url: "#", icon: "🏍️", color: "#ff5500" },
-            { title: "Drift Hunters", url: "#", icon: "🚗", color: "#333333" }
-        ];
-
-        const gamesGrid = document.getElementById('gamesGrid');
-        const searchInput = document.getElementById('searchInput');
-        const gameModal = document.getElementById('gameModal');
-        const gameFrame = document.getElementById('gameFrame');
-        const closeModal = document.getElementById('closeModal');
-        const panicBtn = document.getElementById('panicBtn');
-        const settingsBtn = document.getElementById('settingsBtn');
-        const settingsModal = document.getElementById('settingsModal');
-        const closeSettings = document.getElementById('closeSettings');
-        const saveSettings = document.getElementById('saveSettings');
-
-        let originalTitle = document.title;
-        let originalIcon = document.querySelector('link[rel="icon"]').href;
-
-        // Render Games
-        function renderGames(gamesArray) {
-            gamesGrid.innerHTML = '';
-            gamesArray.forEach(game => {
-                const card = document.createElement('div');
-                card.className = 'game-card';
-                card.innerHTML = `
-                    <div class="game-thumb" style="background: ${game.color}">
-                        ${game.icon}
-                    </div>
-                    <div class="game-info">
-                        <h3>${game.title}</h3>
-                    </div>
-                `;
-                card.addEventListener('click', () => {
-                    gameFrame.src = game.url;
-                    gameModal.classList.add('active');
-                });
-                gamesGrid.appendChild(card);
+        // fun bluebarry button alert
+        const btn = document.getElementById('bluebarryButton');
+        if (btn) {
+            btn.addEventListener('click', function() {
+                alert('🫐 Bluebarry says: “press a button, any button — you pressed the blue one. Berry good job.”');
             });
         }
-
-        renderGames(games);
-
-        // Search Filter
-        searchInput.addEventListener('input', (e) => {
-            const term = e.target.value.toLowerCase();
-            const filtered = games.filter(g => g.title.toLowerCase().includes(term));
-            renderGames(filtered);
-        });
-
-        // Close Modal
-        closeModal.addEventListener('click', () => {
-            gameFrame.src = '';
-            gameModal.classList.remove('active');
-        });
-
-        // PANIC BUTTON
-        function panic() {
-            document.title = "Google Classroom";
-            document.querySelector('link[rel="icon"]').href = "https://ssl.gstatic.com/classroom/favicon.png";
-            window.location.href = "https://classroom.google.com/";
-        }
-
-        panicBtn.addEventListener('click', panic);
-        
-        // Hotkey: Shift + ~ or `
-        document.addEventListener('keydown', (e) => {
-            if (e.key === '`' || e.key === '~' || e.key === 'Escape') {
-                if (gameModal.classList.contains('active')) {
-                    gameFrame.src = '';
-                    gameModal.classList.remove('active');
-                } else {
-                    panic();
-                }
-            }
-        });
-
-        // TAB CLOAKING
-        window.addEventListener('blur', () => {
-            document.title = "Google Classroom";
-            document.querySelector('link[rel="icon"]').href = "https://ssl.gstatic.com/classroom/favicon.png";
-        });
-
-        window.addEventListener('focus', () => {
-            document.title = originalTitle;
-            document.querySelector('link[rel="icon"]').href = originalIcon;
-        });
-
-        // Settings Modal Logic
-        settingsBtn.addEventListener('click', () => settingsModal.classList.add('active'));
-        closeSettings.addEventListener('click', () => settingsModal.classList.remove('active'));
-
-        saveSettings.addEventListener('click', () => {
-            const preset = document.getElementById('cloakPreset').value;
-
-            let title = "Blueberry";
-            let icon = "https://cdn-icons-png.flaticon.com/512/1032/1032952.png";
-
-            if (preset === 'classroom') { title = "Google Classroom"; icon = "https://ssl.gstatic.com/classroom/favicon.png"; }
-            else if (preset === 'canvas') { title = "Canvas"; icon = "https://du11hjcvx0uqb.cloudfront.net/app/assets/favicon.ico"; }
-            else if (preset === 'drive') { title = "Google Drive"; icon = "https://ssl.gstatic.com/images/branding/product/1x/drive_2020q4_32dp.png"; }
-            else if (preset === 'khan') { title = "Khan Academy"; icon = "https://cdn.kastatic.org/images/favicon.ico"; }
-
-            originalTitle = title;
-            originalIcon = icon;
-
-            document.title = originalTitle;
-            document.querySelector('link[rel="icon"]').href = originalIcon;
-            
-            settingsModal.classList.remove('active');
-        });
-
     </script>
 </body>
 </html>
