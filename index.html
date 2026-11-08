@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blueberry — Search</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background: #f5f7fa;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .logo {
+            font-size: 4rem;
+            font-weight: 700;
+            color: #2c3e50;
+            letter-spacing: -1px;
+            margin-bottom: 8px;
+            user-select: none;
+        }
+        .logo span { color: #4a6cf7; }
+
+        .tagline {
+            color: #7f8c8d;
+            font-size: 1rem;
+            margin-bottom: 40px;
+        }
+
+        .search-container {
+            width: 100%;
+            max-width: 600px;
+        }
+
+        .search-box {
+            display: flex;
+            align-items: center;
+            background: white;
+            border: 2px solid #e0e6ed;
+            border-radius: 50px;
+            padding: 6px 6px 6px 24px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+        .search-box:focus-within {
+            border-color: #4a6cf7;
+            box-shadow: 0 4px 24px rgba(74, 108, 247, 0.15);
+        }
+
+        .search-box input {
+            flex: 1;
+            border: none;
+            outline: none;
+            font-size: 1.1rem;
+            padding: 12px 0;
+            background: transparent;
+            color: #2c3e50;
+        }
+        .search-box input::placeholder { color: #a0aec0; }
+
+        .search-box button {
+            background: #4a6cf7;
+            border: none;
+            border-radius: 50px;
+            padding: 12px 28px;
+            color: white;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+            white-space: nowrap;
+        }
+        .search-box button:hover { background: #3a56d4; }
+        .search-box button:active { transform: scale(0.97); }
+
+        .hint {
+            margin-top: 30px;
+            color: #95a5a6;
+            font-size: 0.85rem;
+            text-align: center;
+        }
+        .hint kbd {
+            background: #e8edf2;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-family: inherit;
+            font-size: 0.8rem;
+        }
+
+        footer {
+            position: fixed;
+            bottom: 24px;
+            color: #bdc3c7;
+            font-size: 0.8rem;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="logo">Blue<span>berry</span></div>
+    <p class="tagline">Search the web privately.</p>
+
+    <div class="search-container">
+        <!-- Brave is the engine: form submits directly to Brave Search -->
+        <form class="search-box" id="searchForm" action="https://search.brave.com/search" method="GET" target="_blank">
+            <input
+                type="text"
+                name="q"
+                id="searchInput"
+                placeholder="Search anything..."
+                autocomplete="off"
+                autofocus
+                required
+            >
+            <button type="submit">Search</button>
+        </form>
+    </div>
+
+    <p class="hint">
+        Press <kbd>Enter</kbd> to search with <strong>Brave</strong>
+    </p>
+
+    <footer>Blueberry — powered by Brave Search</footer>
+
+    <script>
+        const searchForm = document.getElementById('searchForm');
+        const searchInput = document.getElementById('searchInput');
+
+        // Focus input on load
+        window.addEventListener('DOMContentLoaded', () => {
+            searchInput.focus();
+        });
+
+        // Trim whitespace before submitting; block empty searches
+        searchForm.addEventListener('submit', (e) => {
+            const query = searchInput.value.trim();
+            if (!query) {
+                e.preventDefault();
+                searchInput.focus();
+                return;
+            }
+            searchInput.value = query;
+        });
+
+        // "/" focuses the search bar from anywhere on the page
+        document.addEventListener('keydown', (e) => {
+            if (e.key === '/' && document.activeElement !== searchInput) {
+                e.preventDefault();
+                searchInput.focus();
+            }
+        });
+    </script>
+</body>
+</html>
