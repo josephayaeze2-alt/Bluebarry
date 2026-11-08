@@ -3,163 +3,390 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>blueberry</title>
+    <title>Blueberry</title>
+    <link rel="icon" href="https://cdn-icons-png.flaticon.com/512/1032/1032952.png">
     <style>
-        * { 
-            margin: 0; 
-            padding: 0; 
-            box-sizing: border-box; 
+        :root {
+            --bg: #0b0b0b;
+            --surface: #151515;
+            --surface-hover: #1f1f1f;
+            --border: #2a2a2a;
+            --text: #ffffff;
+            --text-muted: #a0a0a0;
+            --accent: #4a6cf7;
         }
 
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; }
+
         body {
-            background: #0a0a0a;
-            color: #a3a3a3;
-            font-family: "SF Mono", "Fira Code", "Roboto Mono", Menlo, Consolas, monospace;
-            height: 100vh;
+            background-color: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+        }
+
+        /* HEADER */
+        header {
+            background: var(--surface);
+            border-bottom: 1px solid var(--border);
+            padding: 15px 30px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--accent);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .search-container {
+            flex: 1;
+            max-width: 400px;
+            margin: 0 30px;
+        }
+
+        #searchInput {
+            width: 100%;
+            padding: 10px 15px;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            color: var(--text);
+            font-size: 0.95rem;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+        #searchInput:focus { border-color: var(--accent); }
+
+        .nav-buttons { display: flex; gap: 10px; }
+
+        .btn {
+            background: var(--surface-hover);
+            border: 1px solid var(--border);
+            color: var(--text-muted);
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+        }
+        .btn:hover { background: #2a2a2a; color: white; }
+        .btn.panic { border-color: #ff4444; color: #ff4444; }
+        .btn.panic:hover { background: #ff4444; color: white; }
+
+        /* MAIN CONTENT */
+        main {
+            padding: 30px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .games-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 20px;
+        }
+
+        .game-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .game-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.5);
+            border-color: var(--accent);
+        }
+
+        .game-thumb {
+            width: 100%;
+            height: 150px;
             display: flex;
             align-items: center;
             justify-content: center;
-            -webkit-font-smoothing: antialiased;
+            font-size: 3rem;
         }
 
-        .container {
-            width: 100%;
-            max-width: 500px;
-            padding: 20px;
-        }
-
-        /* Stripped down logo */
-        .logo {
-            font-size: 1rem;
-            font-weight: 400;
-            color: #e5e5e5;
-            margin-bottom: 30px;
-            letter-spacing: 0.5px;
-            text-transform: lowercase;
-        }
-        
-        .logo span { 
-            color: #525252; 
-        }
-
-        /* Terminal style search box */
-        .search-wrapper {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .prompt {
-            color: #4a6cf7; /* Keeping a subtle nod to your original blue */
-            font-size: 1rem;
-            user-select: none;
-        }
-
-        form {
+        .game-info {
+            padding: 15px;
             flex: 1;
             display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
-        input[type="text"] {
-            width: 100%;
-            background: transparent;
-            border: none;
-            outline: none;
-            color: #ffffff;
-            font-family: inherit;
+        .game-info h3 {
             font-size: 1rem;
-            caret-color: #4a6cf7;
+            font-weight: 500;
+            text-align: center;
         }
 
-        input::placeholder {
-            color: #333333;
+        /* MODAL */
+        .modal {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.95);
+            display: none;
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+        .modal.active { display: flex; }
+
+        .modal-content {
+            width: 95vw;
+            height: 95vh;
+            background: black;
+            border-radius: 8px;
+            position: relative;
+            overflow: hidden;
         }
 
-        /* Hide the button visually, keep it for accessibility/enter key */
-        button {
+        .close-btn {
             position: absolute;
-            opacity: 0;
-            pointer-events: none;
+            top: 20px;
+            right: 30px;
+            width: 40px;
+            height: 40px;
+            background: rgba(255,255,255,0.1);
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            border-radius: 50%;
+            cursor: pointer;
+            z-index: 1001;
+            backdrop-filter: blur(5px);
         }
+        .close-btn:hover { background: rgba(255,255,255,0.2); }
 
-        /* Minimal footer */
-        .footer {
+        iframe { width: 100%; height: 100%; border: none; }
+
+        /* SETTINGS MODAL */
+        .settings-modal {
             position: fixed;
-            bottom: 20px;
-            left: 20px;
-            font-size: 0.75rem;
-            color: #262626;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.8);
+            display: none;
+            z-index: 999;
+            align-items: center;
+            justify-content: center;
         }
-
-        .shortcuts {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            font-size: 0.75rem;
-            color: #262626;
+        .settings-modal.active { display: flex; }
+        
+        .settings-box {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            padding: 30px;
+            border-radius: 8px;
+            width: 400px;
         }
-
-        /* Subtle selection color */
-        ::selection {
-            background: #4a6cf7;
-            color: #000;
+        .settings-box h2 { margin-bottom: 20px; }
+        .setting-group { margin-bottom: 15px; }
+        .setting-group label { display: block; margin-bottom: 5px; color: var(--text-muted); font-size: 0.9rem; }
+        .setting-group input, .setting-group select {
+            width: 100%;
+            padding: 8px;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            color: white;
+            border-radius: 4px;
         }
     </style>
 </head>
 <body>
 
-    <div class="container">
-        <div class="logo">blue<span>berry</span></div>
-        
-        <div class="search-wrapper">
-            <span class="prompt">~$</span>
-            <form id="searchForm" action="https://search.brave.com/search" method="GET" target="_blank">
-                <input 
-                    type="text" 
-                    name="q" 
-                    id="searchInput" 
-                    placeholder="type to search..." 
-                    autocomplete="off" 
-                    spellcheck="false"
-                    required
-                >
-                <button type="submit">Search</button>
-            </form>
+    <header>
+        <div class="logo">🫐 Blueberry</div>
+        <div class="search-container">
+            <input type="text" id="searchInput" placeholder="Search games...">
+        </div>
+        <div class="nav-buttons">
+            <button class="btn" id="settingsBtn">Settings</button>
+            <button class="btn panic" id="panicBtn">Panic (Shift + ~)</button>
+        </div>
+    </header>
+
+    <main>
+        <h2 class="section-title">Featured Games</h2>
+        <div class="games-grid" id="gamesGrid">
+            <!-- Games injected via JS -->
+        </div>
+    </main>
+
+    <!-- Game Play Modal -->
+    <div class="modal" id="gameModal">
+        <button class="close-btn" id="closeModal">&times;</button>
+        <div class="modal-content">
+            <iframe id="gameFrame" src="" allowfullscreen></iframe>
         </div>
     </div>
 
-    <div class="footer">brave search</div>
-    <div class="shortcuts">[ / ] focus &nbsp; [ esc ] blur</div>
+    <!-- Settings Modal -->
+    <div class="settings-modal" id="settingsModal">
+        <div class="settings-box">
+            <h2>Tab Cloaking</h2>
+            <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 20px;">Change how your tab looks when teachers walk by.</p>
+            <div class="setting-group">
+                <label>Preset</label>
+                <select id="cloakPreset">
+                    <option value="default">Blueberry (Default)</option>
+                    <option value="classroom">Google Classroom</option>
+                    <option value="canvas">Canvas Dashboard</option>
+                    <option value="drive">Google Drive</option>
+                    <option value="khan">Khan Academy</option>
+                </select>
+            </div>
+            <button class="btn" style="width: 100%; margin-top: 10px;" id="saveSettings">Save</button>
+            <button class="btn" style="width: 100%; margin-top: 10px; background: transparent;" id="closeSettings">Close</button>
+        </div>
+    </div>
 
     <script>
-        const searchForm = document.getElementById('searchForm');
+        // GAMES DATABASE
+        // REPLACE THE 'url' FIELDS WITH YOUR ACTUAL GAME FILE LINKS
+        const games = [
+            { title: "Slope", url: "#", icon: "🏔️", color: "#ff4444" },
+            { title: "1v1.lol", url: "#", icon: "🔫", color: "#4a6cf7" },
+            { title: "Retro Bowl", url: "#", icon: "🏈", color: "#ffaa00" },
+            { title: "Run 3", url: "#", icon: "🏃", color: "#00ccff" },
+            { title: "Paper.io 2", url: "#", icon: "📄", color: "#ffffff" },
+            { title: "Geometry Dash", url: "#", icon: "🔷", color: "#00ff00" },
+            { title: "Subway Surfers", url: "#", icon: "🚇", color: "#ffcc00" },
+            { title: "Cookie Clicker", url: "#", icon: "🍪", color: "#d2691e" },
+            { title: "Tetris", url: "#", icon: "🧱", color: "#ff00ff" },
+            { title: "Pac-Man", url: "#", icon: "🟡", color: "#ffff00" },
+            { title: "Moto X3M", url: "#", icon: "🏍️", color: "#ff5500" },
+            { title: "Drift Hunters", url: "#", icon: "🚗", color: "#333333" }
+        ];
+
+        const gamesGrid = document.getElementById('gamesGrid');
         const searchInput = document.getElementById('searchInput');
+        const gameModal = document.getElementById('gameModal');
+        const gameFrame = document.getElementById('gameFrame');
+        const closeModal = document.getElementById('closeModal');
+        const panicBtn = document.getElementById('panicBtn');
+        const settingsBtn = document.getElementById('settingsBtn');
+        const settingsModal = document.getElementById('settingsModal');
+        const closeSettings = document.getElementById('closeSettings');
+        const saveSettings = document.getElementById('saveSettings');
 
-        window.addEventListener('DOMContentLoaded', () => {
-            searchInput.focus();
+        let originalTitle = document.title;
+        let originalIcon = document.querySelector('link[rel="icon"]').href;
+
+        // Render Games
+        function renderGames(gamesArray) {
+            gamesGrid.innerHTML = '';
+            gamesArray.forEach(game => {
+                const card = document.createElement('div');
+                card.className = 'game-card';
+                card.innerHTML = `
+                    <div class="game-thumb" style="background: ${game.color}">
+                        ${game.icon}
+                    </div>
+                    <div class="game-info">
+                        <h3>${game.title}</h3>
+                    </div>
+                `;
+                card.addEventListener('click', () => {
+                    gameFrame.src = game.url;
+                    gameModal.classList.add('active');
+                });
+                gamesGrid.appendChild(card);
+            });
+        }
+
+        renderGames(games);
+
+        // Search Filter
+        searchInput.addEventListener('input', (e) => {
+            const term = e.target.value.toLowerCase();
+            const filtered = games.filter(g => g.title.toLowerCase().includes(term));
+            renderGames(filtered);
         });
 
-        searchForm.addEventListener('submit', (e) => {
-            const query = searchInput.value.trim();
-            if (!query) {
-                e.preventDefault();
-                return;
-            }
-            searchInput.value = query;
+        // Close Modal
+        closeModal.addEventListener('click', () => {
+            gameFrame.src = '';
+            gameModal.classList.remove('active');
         });
 
+        // PANIC BUTTON
+        function panic() {
+            document.title = "Google Classroom";
+            document.querySelector('link[rel="icon"]').href = "https://ssl.gstatic.com/classroom/favicon.png";
+            window.location.href = "https://classroom.google.com/";
+        }
+
+        panicBtn.addEventListener('click', panic);
+        
+        // Hotkey: Shift + ~ or `
         document.addEventListener('keydown', (e) => {
-            // Pressing '/' focuses the input
-            if (e.key === '/' && document.activeElement !== searchInput) {
-                e.preventDefault();
-                searchInput.focus();
-            }
-            // Pressing 'Escape' blurs the input
-            if (e.key === 'Escape') {
-                searchInput.blur();
-                searchInput.value = '';
+            if (e.key === '`' || e.key === '~' || e.key === 'Escape') {
+                if (gameModal.classList.contains('active')) {
+                    gameFrame.src = '';
+                    gameModal.classList.remove('active');
+                } else {
+                    panic();
+                }
             }
         });
+
+        // TAB CLOAKING
+        window.addEventListener('blur', () => {
+            document.title = "Google Classroom";
+            document.querySelector('link[rel="icon"]').href = "https://ssl.gstatic.com/classroom/favicon.png";
+        });
+
+        window.addEventListener('focus', () => {
+            document.title = originalTitle;
+            document.querySelector('link[rel="icon"]').href = originalIcon;
+        });
+
+        // Settings Modal Logic
+        settingsBtn.addEventListener('click', () => settingsModal.classList.add('active'));
+        closeSettings.addEventListener('click', () => settingsModal.classList.remove('active'));
+
+        saveSettings.addEventListener('click', () => {
+            const preset = document.getElementById('cloakPreset').value;
+
+            let title = "Blueberry";
+            let icon = "https://cdn-icons-png.flaticon.com/512/1032/1032952.png";
+
+            if (preset === 'classroom') { title = "Google Classroom"; icon = "https://ssl.gstatic.com/classroom/favicon.png"; }
+            else if (preset === 'canvas') { title = "Canvas"; icon = "https://du11hjcvx0uqb.cloudfront.net/app/assets/favicon.ico"; }
+            else if (preset === 'drive') { title = "Google Drive"; icon = "https://ssl.gstatic.com/images/branding/product/1x/drive_2020q4_32dp.png"; }
+            else if (preset === 'khan') { title = "Khan Academy"; icon = "https://cdn.kastatic.org/images/favicon.ico"; }
+
+            originalTitle = title;
+            originalIcon = icon;
+
+            document.title = originalTitle;
+            document.querySelector('link[rel="icon"]').href = originalIcon;
+            
+            settingsModal.classList.remove('active');
+        });
+
     </script>
 </body>
 </html>
