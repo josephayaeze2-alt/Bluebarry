@@ -3,157 +3,161 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Blueberry — Search</title>
+    <title>blueberry</title>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        * { 
+            margin: 0; 
+            padding: 0; 
+            box-sizing: border-box; 
+        }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            background: #f5f7fa;
-            min-height: 100vh;
+            background: #0a0a0a;
+            color: #a3a3a3;
+            font-family: "SF Mono", "Fira Code", "Roboto Mono", Menlo, Consolas, monospace;
+            height: 100vh;
             display: flex;
-            flex-direction: column;
             align-items: center;
             justify-content: center;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 500px;
             padding: 20px;
         }
 
+        /* Stripped down logo */
         .logo {
-            font-size: 4rem;
-            font-weight: 700;
-            color: #2c3e50;
-            letter-spacing: -1px;
-            margin-bottom: 8px;
-            user-select: none;
-        }
-        .logo span { color: #4a6cf7; }
-
-        .tagline {
-            color: #7f8c8d;
             font-size: 1rem;
-            margin-bottom: 40px;
+            font-weight: 400;
+            color: #e5e5e5;
+            margin-bottom: 30px;
+            letter-spacing: 0.5px;
+            text-transform: lowercase;
+        }
+        
+        .logo span { 
+            color: #525252; 
         }
 
-        .search-container {
-            width: 100%;
-            max-width: 600px;
-        }
-
-        .search-box {
+        /* Terminal style search box */
+        .search-wrapper {
             display: flex;
             align-items: center;
-            background: white;
-            border: 2px solid #e0e6ed;
-            border-radius: 50px;
-            padding: 6px 6px 6px 24px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
-            transition: border-color 0.2s, box-shadow 0.2s;
-        }
-        .search-box:focus-within {
-            border-color: #4a6cf7;
-            box-shadow: 0 4px 24px rgba(74, 108, 247, 0.15);
+            gap: 12px;
         }
 
-        .search-box input {
+        .prompt {
+            color: #4a6cf7; /* Keeping a subtle nod to your original blue */
+            font-size: 1rem;
+            user-select: none;
+        }
+
+        form {
             flex: 1;
+            display: flex;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            background: transparent;
             border: none;
             outline: none;
-            font-size: 1.1rem;
-            padding: 12px 0;
-            background: transparent;
-            color: #2c3e50;
-        }
-        .search-box input::placeholder { color: #a0aec0; }
-
-        .search-box button {
-            background: #4a6cf7;
-            border: none;
-            border-radius: 50px;
-            padding: 12px 28px;
-            color: white;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: background 0.2s;
-            white-space: nowrap;
-        }
-        .search-box button:hover { background: #3a56d4; }
-        .search-box button:active { transform: scale(0.97); }
-
-        .hint {
-            margin-top: 30px;
-            color: #95a5a6;
-            font-size: 0.85rem;
-            text-align: center;
-        }
-        .hint kbd {
-            background: #e8edf2;
-            padding: 2px 8px;
-            border-radius: 4px;
+            color: #ffffff;
             font-family: inherit;
-            font-size: 0.8rem;
+            font-size: 1rem;
+            caret-color: #4a6cf7;
         }
 
-        footer {
+        input::placeholder {
+            color: #333333;
+        }
+
+        /* Hide the button visually, keep it for accessibility/enter key */
+        button {
+            position: absolute;
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        /* Minimal footer */
+        .footer {
             position: fixed;
-            bottom: 24px;
-            color: #bdc3c7;
-            font-size: 0.8rem;
+            bottom: 20px;
+            left: 20px;
+            font-size: 0.75rem;
+            color: #262626;
+        }
+
+        .shortcuts {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            font-size: 0.75rem;
+            color: #262626;
+        }
+
+        /* Subtle selection color */
+        ::selection {
+            background: #4a6cf7;
+            color: #000;
         }
     </style>
 </head>
 <body>
 
-    <div class="logo">Blue<span>berry</span></div>
-    <p class="tagline">Search the web privately.</p>
-
-    <div class="search-container">
-        <!-- Brave is the engine: form submits directly to Brave Search -->
-        <form class="search-box" id="searchForm" action="https://search.brave.com/search" method="GET" target="_blank">
-            <input
-                type="text"
-                name="q"
-                id="searchInput"
-                placeholder="Search anything..."
-                autocomplete="off"
-                autofocus
-                required
-            >
-            <button type="submit">Search</button>
-        </form>
+    <div class="container">
+        <div class="logo">blue<span>berry</span></div>
+        
+        <div class="search-wrapper">
+            <span class="prompt">~$</span>
+            <form id="searchForm" action="https://search.brave.com/search" method="GET" target="_blank">
+                <input 
+                    type="text" 
+                    name="q" 
+                    id="searchInput" 
+                    placeholder="type to search..." 
+                    autocomplete="off" 
+                    spellcheck="false"
+                    required
+                >
+                <button type="submit">Search</button>
+            </form>
+        </div>
     </div>
 
-    <p class="hint">
-        Press <kbd>Enter</kbd> to search with <strong>Brave</strong>
-    </p>
-
-    <footer>Blueberry — powered by Brave Search</footer>
+    <div class="footer">brave search</div>
+    <div class="shortcuts">[ / ] focus &nbsp; [ esc ] blur</div>
 
     <script>
         const searchForm = document.getElementById('searchForm');
         const searchInput = document.getElementById('searchInput');
 
-        // Focus input on load
         window.addEventListener('DOMContentLoaded', () => {
             searchInput.focus();
         });
 
-        // Trim whitespace before submitting; block empty searches
         searchForm.addEventListener('submit', (e) => {
             const query = searchInput.value.trim();
             if (!query) {
                 e.preventDefault();
-                searchInput.focus();
                 return;
             }
             searchInput.value = query;
         });
 
-        // "/" focuses the search bar from anywhere on the page
         document.addEventListener('keydown', (e) => {
+            // Pressing '/' focuses the input
             if (e.key === '/' && document.activeElement !== searchInput) {
                 e.preventDefault();
                 searchInput.focus();
+            }
+            // Pressing 'Escape' blurs the input
+            if (e.key === 'Escape') {
+                searchInput.blur();
+                searchInput.value = '';
             }
         });
     </script>
